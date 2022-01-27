@@ -1,13 +1,13 @@
 import axios from 'axios'
 import queryString from 'query-string';
 const instance = axios.create({
-  baseURL: "http://api.localhost:8000", 
+  baseURL: "https://opendata.resas-portal.go.jp/api/v1", 
   headers: {
-    
-    'content-type': 'application/json',
+    'content-type': 'application/json;charset=UTF-8',
     Accept: 'application/json',
-    'Access-Control-Allow-Origin': '*', 
-    'Access-Control-Allow-Credentials': true,
+    // 'Access-Control-Allow-Origin': '*', 
+    // 'Access-Control-Allow-Credentials': true,
+    'X-API-KEY': '1xqiK5VEsE4T7PkLCPdJVhyIkfGS4JTkzuU6Vc7j'
   },
   paramsSerializer: params => {
     return queryString.stringify(params, {

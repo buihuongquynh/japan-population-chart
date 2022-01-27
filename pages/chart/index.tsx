@@ -13,8 +13,11 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import ListCities from "../../components/list-citis";
+import useChart from "./useChart";
+
+import ListPrefecture from "../../components/list-prefecture";
 const Home: NextPage = () => {
+  const {dataPrefecture, dataPopulation} = useChart()
   const data = [
     {
       name: "Page A",
@@ -61,12 +64,12 @@ const Home: NextPage = () => {
   ];
 
   return (
-    <div>
-      <div className="list__citices">
-    <ListCities/>
+    <div className="wrapper">
+      <div className="list__prefecture">
+        <ListPrefecture dataPrefecture={dataPrefecture}/>
       </div>
       <div className="chart">
-        <ResponsiveContainer width="90%" height={700}>
+        <ResponsiveContainer width="100%" height={600}>
           <LineChart
             width={500}
             height={300}
@@ -83,8 +86,8 @@ const Home: NextPage = () => {
             <YAxis />
             <Tooltip />
             <Legend />
-            <Line type="monotone" dataKey="pv" stroke="#8884d8" />
-            <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
+            <Line strokeWidth={3} type="monotone" dataKey="pv" stroke="#8884d8" />
+            <Line strokeWidth={3} type="monotone" dataKey="uv" stroke="#82ca9d" />
           </LineChart>
         </ResponsiveContainer>
       </div>
