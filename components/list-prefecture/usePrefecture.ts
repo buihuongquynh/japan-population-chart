@@ -18,6 +18,11 @@ const useCities = () => {
   }
   const getDataPopulation = async () => {
     try {
+      const data = {
+        perYear: '',
+        cityCode: '-  ',
+        prefCode
+      }
       const resPopulation = await dataPopulations()
       setDataPopulation(resPopulation)
       console.log(resPopulation,"hihi")
