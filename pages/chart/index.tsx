@@ -1,8 +1,8 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+
 import styles from "./style.module.scss";
-import React, { PureComponent, useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
+import { listPrefectures, dataPopulations } from "../../api/api";
+import { useRouter } from "next/router";
 import {
   LineChart,
   Line,
@@ -13,38 +13,94 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-import useChart from "./useChart";
-
 import ListPrefecture from "../../components/list-prefecture";
 export type ChartType = {
- 
-  name: string,
-  color: string,
-  prefCode: number,
-  prefName: string
+  name: any;
+  color: string;
+  prefCode: number;
+  prefName: any|string;
+  year: string;
+  checked: any;
+  setChecked: (checked: any)=>void
 };
-const Home=() => {
-  const { dataPrefecture, dataPopulation, getDataPopulation,setDataPopulation } = useChart();
+const Chart = () => {
+  const router = useRouter();
+  const [dataPrefecture, setDataPrefecture] = useState([] as ChartType[]);
   const [checked, setChecked] = useState([] as ChartType[]);
+  const [dataPopulation, setDataPopulation] = useState([
+    {
+      year: "1970",
+    },
+    {
+      year: "1980",
+    },
+    {
+      year: "1990",
+    },
+    {
+      year: "2000",
+    },
+    {
+      year: "2010",
+    },
+    {
+      year: "2020",
+    },
+  ] as ChartType[]);
+  const getDataPopulation = async (prefCode: number, prefName: string) => {
+    try {
+      const data = {
+        cityCode: "-",
+        prefCode,
+      };
+      const resPopulation = await dataPopulations(data);
+      const PopuCompact = resPopulation?.result?.data[0]?.data;
+      const formatData = dataPopulation as any;
+      for (let index = 0; index < formatData.length; index++) {
+        formatData[0][`${prefName}`] = PopuCompact[2]?.value;
+        formatData[1][`${prefName}`] = PopuCompact[4]?.value;
+        formatData[2][`${prefName}`] = PopuCompact[6]?.value;
+        formatData[3][`${prefName}`] = PopuCompact[8]?.value;
+        formatData[4][`${prefName}`] = PopuCompact[10]?.value;
+        formatData[5][`${prefName}`] = PopuCompact[12]?.value;
+      }
+      setDataPopulation(formatData);
+    } catch (error) {
+      if (error?.response?.status === 404) {
+        router.push("/404");
+      }
+    }
+  };
+  const getListPrefectures = async (): Promise<any> => {
+    try {
+      const resPrefecture = await listPrefectures();
+      setDataPrefecture(resPrefecture?.result);
+      resPrefecture?.result?.forEach(
+        (element: { prefCode: number; prefName: string }, index: number) => {
+          getDataPopulation(element.prefCode, element.prefName);
+        }
+      );
+    } catch (error) {
+      if (error.response.status === 404) {
+        router.push("/404");
+      }
+    }
+  };
   useEffect(() => {
-  }, [checked])
+    getListPrefectures();
+  }, [dataPopulation]);
   return (
     <div className="wrapper">
       <div className="list__prefecture">
         <ListPrefecture
           dataPrefecture={dataPrefecture}
-          dataPopulation={dataPopulation}
           checked={checked}
           setChecked={setChecked}
-          getDataPopulation={getDataPopulation}
-          setDataPopulation={setDataPopulation}
         />
       </div>
       <div className={styles.chart}>
-        <div className={styles.nameY}>
-          số  dân
-        </div>
-        <ResponsiveContainer width="98%" height={600}>
+        <div className={styles.nameY}>số dân</div>
+        <ResponsiveContainer width="98%" height={650}>
           <LineChart
             data={dataPopulation}
             margin={{
@@ -55,13 +111,14 @@ const Home=() => {
             }}
           >
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year"  />
-            <YAxis type="number" domain={['dataMin - 100', 'dataMax + 100']}  />
+            <XAxis dataKey="year" />
+            <YAxis type="number" domain={["dataMin - 100", "dataMax + 100"]} />
             <Tooltip />
             <Legend />
-            {checked?.map((item, index) => {
+            {checked?.map((item, key) => {
               return (
                 <Line
+                  key ={item?.name}
                   strokeWidth={3}
                   type="monotone"
                   dataKey={item?.name}
@@ -69,15 +126,12 @@ const Home=() => {
                 />
               );
             })}
-            {/* <Line strokeWidth={3} type="monotone" dataKey="岩手県" stroke="red" /> */}
           </LineChart>
         </ResponsiveContainer>
-        <span className={styles.nameX}>
-          nam
-        </span>
+        <span className={styles.nameX}>nam</span>
       </div>
     </div>
   );
 };
 
-export default Home;
+export default Chart;

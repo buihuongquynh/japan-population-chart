@@ -1,25 +1,39 @@
-import type { NextPage } from "next";
-import Head from "next/head";
-import Image from "next/image";
+import React from "react";
 import styles from "./style.module.scss";
-import React, { useState, useEffect } from "react";
-import { RANDOM_COLOR } from "../../utils/common";
-import usePrefecture from "./usePrefecture";
-const ListPrefecture: NextPage = ({
+import { ChartType } from "../../pages/chart";
+type Props = {
+  dataPrefecture: ChartType[];
+  setChecked: (checked: ChartType[])=>void
+  checked: ChartType[];
+};
+
+const ListPrefecture: React.FC<Props> = ({
   dataPrefecture,
   setChecked,
   checked,
-  getDataPopulation,
-  setDataPopulation,
-  dataPopulation,
 }) => {
-  const { handleCheck, isChecked } = usePrefecture(  dataPrefecture,
-    setChecked,
-    checked,
-    getDataPopulation,
-    setDataPopulation,
-    dataPopulation   );
-
+  const handleCheck = (event: any) => {
+    var updatedList = [...checked] as ChartType[];
+    if (event.target.checked) {
+      updatedList = [
+        ...checked,
+        { 
+          name: event.target.value, 
+          color: '#'+(Math.floor(Math.random()*16777215)+1).toString(16) 
+        },
+      ] as ChartType[];
+      setChecked(updatedList);
+    } else {
+      const dataTest = [...checked];
+      const updatedList = dataTest.filter(
+        (item, index) => item.name !== event.target.value
+      );
+      setChecked(updatedList);
+    }
+  };
+  const isChecked = (item: ChartType) => {
+    return checked.includes(item) ? "checked-item" : "not-checked-item";
+  };
   return (
     <>
       <div className={styles.checkList}>
@@ -43,5 +57,4 @@ const ListPrefecture: NextPage = ({
     </>
   );
 };
-
 export default ListPrefecture;
