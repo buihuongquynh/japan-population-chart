@@ -3,34 +3,32 @@ import Head from "next/head";
 import Image from "next/image";
 import styles from "./style.module.scss";
 import React, { useState, useEffect } from "react";
-const ListPrefecture: NextPage = ({ dataPrefecture, setChecked, checked }) => {
-  const handleCheck = (event) => {
-    var updatedList = [...checked];
-    if (event.target.checked) {
-      updatedList = [...checked, event.target.value];
-    } else {
-      updatedList.splice(checked.indexOf(event.target.value), 1);
-    }
-    setChecked(updatedList);
-  };
-  // Generate string of checked items
-  const checkedItems = checked.length
-    ? checked.reduce((total, item) => {
-        return total + ", " + item;
-      })
-    : "";
-  // Return classes based on whether item is checked
-  const isChecked = (item) => {
-    return checked.includes(item) ? "checked-item" : "not-checked-item";
-  };
+import { RANDOM_COLOR } from "../../utils/common";
+import usePrefecture from "./usePrefecture";
+const ListPrefecture: NextPage = ({
+  dataPrefecture,
+  setChecked,
+  checked,
+  getDataPopulation,
+  setDataPopulation,
+  dataPopulation,
+}) => {
+  const { handleCheck, isChecked } = usePrefecture(  dataPrefecture,
+    setChecked,
+    checked,
+    getDataPopulation,
+    setDataPopulation,
+    dataPopulation   );
+
   return (
     <>
       <div className={styles.checkList}>
         <div className={styles.title}>Your CheckList:</div>
         <div className={styles.list__container}>
           {dataPrefecture?.map((item, index) => (
-            <div className={styles.item__prefecture} key={index}>
+            <div className={styles.item__prefecture} key={item?.prefCode}>
               <input
+                key={index}
                 value={item?.prefName}
                 type="checkbox"
                 onChange={handleCheck}
@@ -42,8 +40,6 @@ const ListPrefecture: NextPage = ({ dataPrefecture, setChecked, checked }) => {
           ))}
         </div>
       </div>
-
-      <div>{`Items checked are: ${checkedItems}`}</div>
     </>
   );
 };

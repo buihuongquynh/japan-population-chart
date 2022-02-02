@@ -1,8 +1,25 @@
 body{
     font-size: 1rem;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 .container{
-    margin: 0 50px;
+    margin: 0 100px;
+    .recharts-legend-wrapper{
+        position: unset !important;
+        .recharts-default-legend{
+            background-color: white;
+            z-index: 99999 !important;
+            position: absolute;
+            top: 50%;
+            right: -6%;
+            transform: translateY(-50%);
+            .recharts-legend-item{
+                display: block !important;
+            }
+        }
+    }
+   
 }
 .recharts-text {
     font-weight: 600 !important;
