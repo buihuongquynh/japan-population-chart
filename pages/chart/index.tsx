@@ -16,9 +16,16 @@ import {
 import useChart from "./useChart";
 
 import ListPrefecture from "../../components/list-prefecture";
-const Home: NextPage = () => {
+export type ChartType = {
+ 
+  name: string,
+  color: string,
+  prefCode: number,
+  prefName: string
+};
+const Home=() => {
   const { dataPrefecture, dataPopulation, getDataPopulation,setDataPopulation } = useChart();
-  const [checked, setChecked] = useState([]);
+  const [checked, setChecked] = useState([] as ChartType[]);
   useEffect(() => {
   }, [checked])
   return (
@@ -55,11 +62,10 @@ const Home: NextPage = () => {
             {checked?.map((item, index) => {
               return (
                 <Line
-                  index
                   strokeWidth={3}
                   type="monotone"
-                  dataKey={item.name}
-                  stroke={item.color}
+                  dataKey={item?.name}
+                  stroke={item?.color}
                 />
               );
             })}

@@ -3,13 +3,23 @@ import axios from 'axios';
 import { listPrefectures, dataPopulations } from '../../api/api';
 import { useRouter } from 'next/router';
 import queryString from 'query-string';
-interface HomeController {
-    data: object;
-  }
-
-const useChart = ():HomeController => {
+export type UserChartType = {
+  // id: number;
+  // category: string;
+  // description: string;
+  // image: string;
+  // price: number;
+  // title: string;
+  // amount: number;
+ 
+  year: string,
+total: number,
+prefName: string,
+prefCode: string,
+};
+const useChart = () => {
   const router = useRouter()
-  const [dataPrefecture, setDataPrefecture] = useState([]);
+  const [dataPrefecture, setDataPrefecture] = useState([] as UserChartType[]);
   const [dataPopulation, setDataPopulation] = useState([
     {
       year: "1970", 
@@ -43,15 +53,15 @@ const useChart = ():HomeController => {
     },
     
   ])
-  const getDataPopulation = async (prefCode, prefName) => {
+  const getDataPopulation = async (prefCode: number, prefName: string) => {
     try {
       const data = {
         cityCode: '-',
         prefCode,
       }
       const resPopulation = await dataPopulations(data)
-      const PopuCompact = resPopulation.result.data[0].data
-      const formatData = dataPopulation
+      const PopuCompact = resPopulation?.result?.data[0]?.data
+      const formatData = dataPopulation as UserChartType[]
      for (let index = 0; index < formatData.length; index++) {
         formatData[0][`${prefName}`] = PopuCompact[2]?.value;
         formatData[1][`${prefName}`] = PopuCompact[4]?.value;
@@ -72,7 +82,7 @@ const useChart = ():HomeController => {
     try {
       const resPrefecture = await listPrefectures()
       setDataPrefecture(resPrefecture?.result)
-      resPrefecture?.result.forEach(element => {
+      resPrefecture?.result?.forEach((element: UserChartType[]) => {
         getDataPopulation(element.prefCode, element.prefName)
       });
     } catch (error) {
