@@ -68,9 +68,7 @@ const Chart = () => {
       setDataPopulation(formatData);
       setLoadding(false);
     } catch (error) {
-      if (error?.response?.status === 404) {
-        router.push("/404");
-      }
+      console.log(error)
     }
   };
   const getListPrefectures = async (): Promise<any> => {
@@ -84,9 +82,7 @@ const Chart = () => {
         }
       );
     } catch (error) {
-      if (error.response.status === 404) {
-        router.push("/404");
-      }
+      console.log(error)
     }
     setLoadding(false);
   };
