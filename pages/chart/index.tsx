@@ -1,4 +1,3 @@
-
 import styles from "./style.module.scss";
 import React, { useState, useEffect } from "react";
 import { listPrefectures, dataPopulations } from "../../api/api";
@@ -18,18 +17,19 @@ export type ChartType = {
   name: any;
   color: string;
   prefCode: number;
-  prefName: any|string;
+  prefName: any | string;
   year: string;
   checked: any;
-  setChecked: (checked: any)=>void
+  setChecked: (checked: any) => void;
 };
 const Chart = () => {
   const router = useRouter();
   const [dataPrefecture, setDataPrefecture] = useState([] as ChartType[]);
   const [checked, setChecked] = useState([] as ChartType[]);
+  const [loadding, setLoadding] = useState(false);
   const [dataPopulation, setDataPopulation] = useState([
     {
-      year: "1970",
+      year: "",
     },
     {
       year: "1980",
@@ -48,6 +48,7 @@ const Chart = () => {
     },
   ] as ChartType[]);
   const getDataPopulation = async (prefCode: number, prefName: string) => {
+    setLoadding(true);
     try {
       const data = {
         cityCode: "-",
@@ -65,6 +66,7 @@ const Chart = () => {
         formatData[5][`${prefName}`] = PopuCompact[12]?.value;
       }
       setDataPopulation(formatData);
+      setLoadding(false);
     } catch (error) {
       if (error?.response?.status === 404) {
         router.push("/404");
@@ -72,6 +74,7 @@ const Chart = () => {
     }
   };
   const getListPrefectures = async (): Promise<any> => {
+    setLoadding(true);
     try {
       const resPrefecture = await listPrefectures();
       setDataPrefecture(resPrefecture?.result);
@@ -85,51 +88,63 @@ const Chart = () => {
         router.push("/404");
       }
     }
+    setLoadding(false);
   };
   useEffect(() => {
     getListPrefectures();
   }, [dataPopulation]);
   return (
     <div className="wrapper">
-      <div className="list__prefecture">
-        <ListPrefecture
-          dataPrefecture={dataPrefecture}
-          checked={checked}
-          setChecked={setChecked}
-        />
-      </div>
-      <div className={styles.chart}>
-        <div className={styles.nameY}>số dân</div>
-        <ResponsiveContainer width="98%" height={650}>
-          <LineChart
-            data={dataPopulation}
-            margin={{
-              top: 5,
-              right: 30,
-              left: 20,
-              bottom: 5,
-            }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
-            <YAxis type="number" domain={["dataMin - 100", "dataMax + 100"]} />
-            <Tooltip />
-            <Legend />
-            {checked?.map((item, key) => {
-              return (
-                <Line
-                  key ={item?.name}
-                  strokeWidth={3}
-                  type="monotone"
-                  dataKey={item?.name}
-                  stroke={item?.color}
+      {loadding ? (
+        <div className="flexLoading">
+        <div className="loader"></div>
+        </div>
+      ) : (
+        <>
+          <div className="list__prefecture">
+            <ListPrefecture
+              dataPrefecture={dataPrefecture}
+              checked={checked}
+              setChecked={setChecked}
+            />
+          </div>
+          <div className={styles.chart}>
+            <div className={styles.nameY}>人口数</div>
+            <ResponsiveContainer width="98%" height={650}>
+              <LineChart
+                data={dataPopulation}
+                margin={{
+                  top: 5,
+                  right: 30,
+                  left: 20,
+                  bottom: 5,
+                }}
+              >
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="year" />
+                <YAxis
+                  type="number"
+                  domain={["100000", "800000"]}
                 />
-              );
-            })}
-          </LineChart>
-        </ResponsiveContainer>
-        <span className={styles.nameX}>nam</span>
-      </div>
+                <Tooltip />
+                <Legend />
+                {checked?.map((item, key) => {
+                  return (
+                    <Line
+                      key={item?.name}
+                      strokeWidth={3}
+                      type="monotone"
+                      dataKey={item?.name}
+                      stroke={item?.color}
+                    />
+                  );
+                })}
+              </LineChart>
+            </ResponsiveContainer>
+            <span className={styles.nameX}>年度</span>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -13,3 +13,16 @@
     .nameY{
         font-weight: 600;
     }
+    @media (max-width: 670px) {
+        .nameX{
+            font-size: 15px;
+            bottom: -15px;
+        }
+        .nameY{
+            font-size: 15px;
+        }
+        .chart{
+            margin-top: 15px;
+        }
+       
+    }

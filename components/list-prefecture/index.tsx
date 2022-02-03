@@ -37,7 +37,7 @@ const ListPrefecture: React.FC<Props> = ({
   return (
     <>
       <div className={styles.checkList}>
-        <div className={styles.title}>Your CheckList:</div>
+        <div className={styles.title}>都道府県</div>
         <div className={styles.list__container}>
           {dataPrefecture?.map((item, index) => (
             <div className={styles.item__prefecture} key={item?.prefCode}>

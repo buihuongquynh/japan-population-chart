@@ -5,10 +5,12 @@
     flex-wrap: wrap;
     .item__prefecture {
       width: 10%;
+      display: flex;
+      align-items: center;
       input {
         position: relative !important;
         appearance: none;
-        margin: 8px;
+        margin: 5px;
         box-sizing: content-box;
         overflow: hidden;
 
@@ -24,7 +26,7 @@
         }
 
         &:checked:before {
-          border-color: #12cbc4;
+          border-color: #1f2f98;
           transition: 0.5s border-color ease;
         }
 
@@ -40,7 +42,7 @@
           top: 50%;
           left: 50%;
           transform-origin: 50% 50%;
-          background-color: #12cbc4;
+          background-color: #1f2f98;
           width: 16px;
           height: 16px;
           border-radius: 100vh;
@@ -75,7 +77,7 @@
             border-radius: 0;
             transform: translate(-50%, -85%) scale(0) rotate(45deg);
             background-color: transparent;
-            box-shadow: 4px 4px 0px 0px #12cbc4;
+            box-shadow: 4px 4px 0px 0px #1f2f98;
           }
 
           &:checked:after {
@@ -90,7 +92,7 @@
           }
 
           &:checked:not(:disabled):before {
-            background-color: #12cbc4;
+            background-color: #1f2f98;
           }
 
           &:not(:disabled):after {
@@ -166,9 +168,7 @@
     .list__container {
         font-size: 10px;
         margin: 0;
-        .item__prefecture {
-          width: 30% !important;
-        }
+       
       }
     
 }
