@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node ./test-migration.js && next build",
+    "build": "next build",
     "export": "next export",
     "start": "next start",
     "lint": "next lint"
