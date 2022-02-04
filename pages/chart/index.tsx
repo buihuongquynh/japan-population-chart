@@ -23,7 +23,6 @@ export type ChartType = {
   setChecked: (checked: any) => void;
 };
 const Chart = () => {
-  const router = useRouter();
   const [dataPrefecture, setDataPrefecture] = useState([] as ChartType[]);
   const [checked, setChecked] = useState([] as ChartType[]);
   const [loadding, setLoadding] = useState(false);
