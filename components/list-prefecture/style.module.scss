@@ -3,6 +3,10 @@
     display: flex;
     align-items: center;
     flex-wrap: wrap;
+    font-size: 20px;
+    .title{
+      color: #1f2f98;
+    }
     .item__prefecture {
       width: 10%;
       display: flex;

@@ -21,8 +21,12 @@ body{
     }
    
 }
+.checked-item{
+    color: #1f2f98;
+}
 .recharts-text {
     font-weight: 600 !important;
+    font-size: 20px;
 }
 .flexLoading{
     display: flex;

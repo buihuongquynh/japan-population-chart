@@ -32,12 +32,19 @@ const ListPrefecture: React.FC<Props> = ({
     }
   };
   const isChecked = (item: ChartType) => {
-    return checked.includes(item) ? "checked-item" : "not-checked-item";
+    let isChecked
+    checked.forEach(element => {
+      if(element.name === item){
+        isChecked = "checked-item"
+      }
+      else isChecked = "not-checked-item"
+    });
+    return isChecked
   };
   return (
     <>
       <div className={styles.checkList}>
-        <h1 className={styles.title}>都道府県</h1>
+        <h1 style={{color:'#1f2f98', fontSize:'30px'}}>都道府県</h1>
         <div className={styles.list__container}>
           {dataPrefecture?.map((item, index) => (
             <div className={styles.item__prefecture} key={item?.prefCode}>
