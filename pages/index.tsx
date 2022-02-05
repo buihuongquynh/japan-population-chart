@@ -7,7 +7,6 @@ const Index: NextPage = () => {
       <Head>
         <title>日本の人口チャート</title>
         <meta name="description" />
-        <link rel="icon" href="/favicon.ico" />
       </Head>
       <Chart/>
     </div>

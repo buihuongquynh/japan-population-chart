@@ -3,7 +3,7 @@ import styles from "./style.module.scss";
 import { ChartType } from "../../pages/chart";
 type Props = {
   dataPrefecture: ChartType[];
-  setChecked: (checked: ChartType[])=>void
+  setChecked: (checked: ChartType[]) => void;
   checked: ChartType[];
 };
 
@@ -17,9 +17,9 @@ const ListPrefecture: React.FC<Props> = ({
     if (event.target.checked) {
       updatedList = [
         ...checked,
-        { 
-          name: event.target.value, 
-          color: '#'+(Math.floor(Math.random()*16777215)+1).toString(16) 
+        {
+          name: event.target.value,
+          color: "#" + (Math.floor(Math.random() * 16777215) + 1).toString(16),
         },
       ] as ChartType[];
       setChecked(updatedList);
@@ -32,19 +32,18 @@ const ListPrefecture: React.FC<Props> = ({
     }
   };
   const isChecked = (item: ChartType) => {
-    let isChecked
-    checked.forEach(element => {
-      if(element.name === item){
-        isChecked = "checked-item"
-      }
-      else isChecked = "not-checked-item"
+    let isChecked;
+    checked.forEach((element) => {
+      if (element.name === item) {
+        isChecked = "checked-item";
+      } else isChecked = "not-checked-item";
     });
-    return isChecked
+    return isChecked;
   };
   return (
     <>
       <div className={styles.checkList}>
-        <h1 style={{color:'#1f2f98', fontSize:'30px'}}>都道府県</h1>
+        <h1 style={{ color: "#1f2f98", fontSize: "30px" }}>都道府県</h1>
         <div className={styles.list__container}>
           {dataPrefecture?.map((item, index) => (
             <div className={styles.item__prefecture} key={item?.prefCode}>
